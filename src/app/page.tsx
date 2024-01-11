@@ -9,6 +9,11 @@ import { Button } from "@/components/ui/button";
 import { RESUME_DATA } from "@/data/resume-data";
 import { ProjectCard } from "@/components/project-card";
 
+function NewlineText(props) {
+  const text = props.text;
+  return text.split('\n').map(str => <p>{str}</p>);
+}
+
 export const metadata: Metadata = {
   title: `${RESUME_DATA.name} | ${RESUME_DATA.about}`,
   description: RESUME_DATA.summary,
@@ -93,10 +98,17 @@ export default function Page() {
           </Avatar>
         </div>
         <Section>
-          <h2 className="text-xl font-bold">About</h2>
           <p className="text-pretty font-mono text-sm text-muted-foreground">
             {RESUME_DATA.summary}
           </p>
+        </Section>
+        <Section>
+          <h2 className="text-xl font-bold">Skills</h2>
+          <div className="flex flex-wrap gap-1">
+            {RESUME_DATA.skills.map((skill) => {
+              return <Badge key={skill}>{skill}</Badge>;
+            })}
+          </div>
         </Section>
         <Section>
           <h2 className="text-xl font-bold">Work Experience</h2>
@@ -113,8 +125,8 @@ export default function Page() {
                       <span className="inline-flex gap-x-1">
                         {work.badges.map((badge) => (
                           <Badge
-                            variant="secondary"
                             className="align-middle text-xs"
+			    variant="secondary"
                             key={badge}
                           >
                             {badge}
@@ -132,7 +144,7 @@ export default function Page() {
                   </h4>
                 </CardHeader>
                 <CardContent className="mt-2 text-xs">
-                  {work.description}
+                  <NewlineText text={work.description} />
                 </CardContent>
               </Card>
             );
@@ -159,14 +171,47 @@ export default function Page() {
           })}
         </Section>
         <Section>
-          <h2 className="text-xl font-bold">Skills</h2>
-          <div className="flex flex-wrap gap-1">
-            {RESUME_DATA.skills.map((skill) => {
-              return <Badge key={skill}>{skill}</Badge>;
-            })}
-          </div>
+          <h2 className="text-xl font-bold">Awards</h2>
+          {RESUME_DATA.awards.map((awards) => {
+            return (
+              <Card key={awards.award}>
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-x-2 text-base">
+                    <h3 className="inline-flex items-center justify-center gap-x-1 font-semibold leading-none">
+                      {awards.award}
+                    </h3>
+                    <div className="text-sm tabular-nums text-gray-500">
+                      {awards.date}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="mt-2 text-xs">
+                  <NewlineText text={awards.description} />
+                </CardContent>
+              </Card>
+            );
+          })}
         </Section>
-
+	{/*
+        <Section>
+          <h2 className="text-xl font-bold">Languages</h2>
+          {RESUME_DATA.languages.map((languages) => {
+            return (
+              <Card key={languages.lang}>
+                <CardHeader>
+                  <div className="flex items-center justify-between gap-x-2 text-base">
+                    <h3 className="font-semibold leading-none">
+                      {languages.lang}
+                    </h3>
+                  </div>
+                </CardHeader>
+                <CardContent className="mt-2">{languages.proficiency}</CardContent>
+              </Card>
+            );
+          })}
+        </Section>
+	*/}
+	{/*
         <Section className="print-force-new-page scroll-mb-16">
           <h2 className="text-xl font-bold">Projects</h2>
           <div className="-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3">
@@ -183,6 +228,7 @@ export default function Page() {
             })}
           </div>
         </Section>
+	*/}
       </section>
 
       <CommandMenu
